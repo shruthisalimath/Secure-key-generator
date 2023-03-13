@@ -27,7 +27,35 @@ GIVEN I need a new, secure password.
  7.WHEN the password is generated,
     THEN the password is either displayed in an alert or written to the page.
 
-## Mock-Up
+## Screenschot
 
-![Password-Generator](./assets/Images/03-javascript-homework-demo.png)
+![Password-Generator](./assets/Images/Password-generator.png)
+
+## Discription of the Challenge: Password-generator(Secure-Key-Generator)
+
+1. Initailly commited the stared code of HTML,CSS and javaScript.
+2. In HTML linked  the refernce of the CSS styl sheet and JavaScript.
+3. Implemented code in the JavaScript along with the starter code.
+4. Implemented the main function to generate password so when clicked the button
+    to generate a password, then it presents prompts for password criteria.
+5. Then implemented prompts to get the password length input from user,
+   and choose a length of at least 8 characters and no more than 128 characters,
+   and validated length requirements.
+6. Then implemented prompts for character types to include lowercase, uppercase, 
+    numeric, and/or special characters in the generated passord.
+7. Then Validated that generated password has all selected character type.
+8. created the password character pool by using different character type that user selected 
+    and then called further to create password.
+9. Created a base function to create the password from the characterpool and the password 
+    length given.
+10. Validated at least one character type should be selected.
+11. Checked passwords individual character to see if any of it matches with give character
+     sequence.
+12. Then a new password is generted with all the required acceptance criteria and written to 
+    the page.
+13. Finally deployed the application.
+
+
+
+
 

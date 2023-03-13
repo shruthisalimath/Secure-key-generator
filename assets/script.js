@@ -174,7 +174,7 @@ function  validateCreatedPassword(createdPassword, isLowerCaseTypeNeeded, isUppe
   return true;
 }
 
-// function that checkes passwords individual character to see if any of it matches with give character sequence.
+// function that checks passwords individual character to see if any of it matches with give character sequence.
 function isGeneratedPasswordContains(pwd, charTypeSequence) {
   for(i = 0; i < pwd.length; i++) {
     //alert("Char value to check " + pwd.charAt(i));
