@@ -55,6 +55,16 @@ GIVEN I need a new, secure password.
     the page.
 13. Finally deployed the application.
 
+URL
+1.The URL of the deployed application:
+
+https://shruthisalimath.github.io/Secure-key-generator/
+
+2.The URL of the GitHub repository:
+
+https://github.com/shruthisalimath/Secure-key-generator
+
+
 
 
 
