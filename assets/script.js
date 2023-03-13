@@ -1,100 +1,3 @@
-
-// validating length of the password
-//function generatePassword() {
-
-function pwlength() {
-  var promptlength = window.prompt("Please enter length of the password, length can be between 8 to 128 characters");
-  var num = parseInt(promptlength, 10);
-
-  //If user select Cancel, come out of program
-  if (promptlength === null) {
-    return num;
-  }
-
-  if (promptlength === "" || isNaN(num) || num === undefined) {
-    window.alert("you need to put in a number between 8 to 128, please try again");
-    return pwlength();
-  }
-  if (num < 8) {
-    window.alert("Your password is too short, please try again");
-    return pwlength();
-  }
-
-  if (num > 128) {
-    window.alert("Your password is too long, please try again");
-    return pwlength();
-  } else {
-    return num;
-  }
-
-};
-
-
-// validating character types whether or not to include lowercase, uppercase, numeric, and/or special characters.
-
-
-function characters(passLength) {
-  var promptLowerCase = window.confirm("Would you like to include lowercase letters?\nPress OK for  Yes and Cancel for No.");
-  alert("promptLowerCase=" + promptLowerCase);
-  var promptUpperCase = window.confirm("Would you like to include uppercase letters?\nPress OK for Yes and Cancel for No.");
-  alert("promptUppercase=" + promptUpperCase);
-  var promptNumbers = window.confirm("Would you like to include numbers?\nPress OK for Yes and Cancel for No.");
-  alert("promptNumbers=" + promptNumbers);
-  var promptSpecial = window.confirm("Would you like to include special characters?\nPress OK for Yes and Cancel for No.");
-  alert("promptSpecial=" + promptSpecial);
-
-  var potentialPwd="";
-  var generatedPassword = "";
-  var lowerCase = "abcdefghijklmnopqrstuvwxyz";
-  var upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-  var numbers = "0123456789";
-  var specialChars = " !#$%&'()*+,-./:;<=>?@[\]^_`{|}~";
-  if (promptLowerCase || promptUpperCase || promptNumbers || promptSpecial) {
-    var possibility = "";
-    if (promptLowerCase) {
-      possibility += lowerCase;
-    }
-    if (promptUpperCase) {
-      possibility += upperCase;
-    }
-    if (promptNumbers) {
-      possibility += numbers;
-    }
-    if (promptSpecial) {
-      possibility += specialChars;
-    }
-    var potentialPwd = passwordGenerator(passLength, possibility);
-    alert("potentialPwd=" + potentialPwd);
-    // you have to check if potentialPwd generated contains each of the characters options chosen 
-    // by the user at least one of them exist in it or not. if not then need to generated the pwd again
-    //until the all the condition is satisfied by the new password generated.
-  }
-  else {
-    alert("You have to choose minimum  one type of character.\nPlease try again.");
-  }
-  return potentialPwd;
-
-  /*  if(possibility===null) //If user select Cancel, come out of program
-  { return num;
-  }*/
-}
-
-function passwordGenerator(pwdLength, passChars) {
-  var generatedPassword = "";
-  for (i = 0; i <= pwdLength; i++) {
-    generatedPassword+= passChars.charAt(Math.floor(Math.random() * passChars.length));
-  }
-  return generatedPassword;
-}
-
-function generatePassword() {
-  var passwordLength = pwlength();
-  alert("passwordLength=" + passwordLength)
-  var passwordCharacters = characters(passwordLength);
-  alert("passwordCharacters=" + passwordCharacters);
-  return passwordCharacters;
-}
-
 // Assignment Code
 var generateBtn = document.querySelector("#generate");
 
@@ -109,9 +12,176 @@ function writePassword() {
 // Add event listener to generate button
 generateBtn.addEventListener("click", writePassword);
 
+// Code implementation to satisfy the requirements. //
 
+//define different character type constants. to use later to generate password.
+const lowerCaseLetters = "abcdefghijklmnopqrstuvwxyz";
+const upperCaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const numbers = "0123456789";
+const specialChars = " !#$%&'()*+,-./:;<=>?@[\]^_`{|}~";
 
+// Implementation of the main function to generate password.
+function generatePassword(){
 
+  //Initial prompt to get the password length input from user.
+  let passwordLengthInput = promptForPasswordLength(); 
+  //check for cancel button click, if cancel then value will be null.
+  if(passwordLengthInput === null) {
+    return "Your Secure Password";
+  }
+  
+  // While loop to get the desired password length input that validates length requirements. 
+  while(!checkPasswordLengthValid(passwordLengthInput)) {
+    // Prompt the user to get the length. 
+    passwordLengthInput = promptForPasswordLength();
+    //again check for cancel button click
+    if(passwordLengthInput === null) {
+      return "Your Secure Password";
+    }
+  }
+  
+  //prompting character types and store the response (true or false) for all four character types
+  let isLowerCaseTypeNeeded = promptForLowerCaseTypesNeed();
 
+  let isUpperCaseTypeNeeded = promptForUpperCaseTypesNeed();
 
+  let isNumberTypeNeeded = promptForNumberTypesNeed();
 
+  let isSpecialCharTypeNeeded = promptForSpecialCharTypesNeed();
+  
+
+  //If no type is selected then return to Generating password screen to start over.
+  if(!(isLowerCaseTypeNeeded || isUpperCaseTypeNeeded || isNumberTypeNeeded || isSpecialCharTypeNeeded)) {
+    alert("You need to select at least one of the character type for password generation.\n\nPlease Start Over");
+    return "Your Secure Password";
+  }
+  // THis will create the password and also validates that it has all selected character type in the created password.
+  return createPassword(passwordLengthInput, isLowerCaseTypeNeeded, isUpperCaseTypeNeeded, isNumberTypeNeeded, isSpecialCharTypeNeeded);
+}
+
+// function to prompt the user for password length.
+function promptForPasswordLength() {
+  return window.prompt("Please enter length of the password, length can be between 8 to 128 characters"); 
+} 
+
+// function that checkes for the valid password length between 8 and 128 also check for not number entry by user.
+function checkPasswordLengthValid(passwordLength){
+  let pwdLengthNumber = parseInt(passwordLength,10);
+  if(isNaN(pwdLengthNumber)) {
+    return false;
+  }
+  if(pwdLengthNumber < 8 || pwdLengthNumber > 128) {
+    return false ;
+  }
+  return true;
+}
+
+// prompt for Lower case type chacarcter need in the password
+function promptForLowerCaseTypesNeed() {
+  return window.confirm("Would you like to include lower case letters in your password?\n\nPress OK for  Yes and Cancel for No.");
+}
+
+// prompt for Upper case type chacarcter need in the password
+function promptForUpperCaseTypesNeed() {
+  return window.confirm("Would you like to include upper case letters in your password?\n\nPress OK for Yes and Cancel for No.");
+}
+
+// prompt for Number type need in the password
+function promptForNumberTypesNeed() {
+  return window.confirm("Would you like to include numbers in your password?\n\nPress OK for Yes and Cancel for No.");
+}
+
+// prompt for Special character type need in the password
+function promptForSpecialCharTypesNeed() {
+  return window.confirm("Would you like to include special characters in your password?\n\nPress OK for Yes and Cancel for No.");
+}
+
+// function that intially creates the password character pool by using different character type user selected and then calls further to create password
+function createPassword(passwordLengthInput, isLowerCaseTypeNeeded, isUpperCaseTypeNeeded, isNumberTypeNeeded, isSpecialCharTypeNeeded) {
+
+  //Password character pool creation.
+  let passwordCharacterPool = "";
+  if(isLowerCaseTypeNeeded) {
+    passwordCharacterPool += lowerCaseLetters;
+  } 
+  if(isUpperCaseTypeNeeded) {
+    passwordCharacterPool += upperCaseLetters;
+  }
+  if(isNumberTypeNeeded) {
+    passwordCharacterPool += numbers;
+  }
+  if(isSpecialCharTypeNeeded) {
+    passwordCharacterPool += specialChars;
+  }
+  
+  //check once again for passwordLengthInput from user is a proper number
+  let passwordLengthNumber = parseInt(passwordLengthInput, 10);
+  //call for actual generating and also validating the password.
+  let createdPassword = generateAndValidatePassword(passwordLengthNumber, passwordCharacterPool, isLowerCaseTypeNeeded, isUpperCaseTypeNeeded, isNumberTypeNeeded, isSpecialCharTypeNeeded);
+  //return the valid newly generated password.
+  return createdPassword;
+}
+
+//function that gets all the proper inputs provided by the user and generates the password, also validates the password to match with the selected charcter type inclusion
+function generateAndValidatePassword(passwordLengthNumber, passwordCharacterPool, isLowerCaseTypeNeeded, isUpperCaseTypeNeeded, isNumberTypeNeeded, isSpecialCharTypeNeeded) {
+  let generatedPassword = "";
+
+  //While loop until we get the valid password that matches the requirements
+  while(!(validateCreatedPassword(generatedPassword, isLowerCaseTypeNeeded, isUpperCaseTypeNeeded, isNumberTypeNeeded, isSpecialCharTypeNeeded))) {
+    generatedPassword = create(passwordLengthNumber, passwordCharacterPool);
+  }
+  //alert("generatedPassword In generateAndValidatePassword :" + generatedPassword);
+  return generatedPassword;
+}
+
+// a base function to create the password from the characterpool and the password length given.
+function create(pwdLengthNumber, pwdCharacterPool) {
+  let newPassword = "";
+  for (i = 0; i < pwdLengthNumber; i++) {
+    newPassword += pwdCharacterPool.charAt(Math.floor(Math.random() * pwdCharacterPool.length));
+  }
+  //alert("Password in CREATE : " + newPassword);
+  return newPassword;
+}
+
+//function that validates the password created using create() function to match the all the user selected character types
+function  validateCreatedPassword(createdPassword, isLowerCaseTypeNeeded, isUpperCaseTypeNeeded, isNumberTypeNeeded, isSpecialCharTypeNeeded) {
+  //alert("INSIDE validateCreatedPassword :" + createdPassword);
+  if(isLowerCaseTypeNeeded) {
+    let includesLowerCase = isGeneratedPasswordContains(createdPassword, lowerCaseLetters);
+    if(!includesLowerCase) {
+      return false;
+    }
+  }
+  if(isUpperCaseTypeNeeded) {
+    let includesUpperCase = isGeneratedPasswordContains(createdPassword, upperCaseLetters);
+    if(!includesUpperCase) {
+      return false;
+    }
+  }
+  if(isNumberTypeNeeded) {
+    let includesNumber = isGeneratedPasswordContains(createdPassword, numbers);
+    if(!includesNumber) {
+      return false;
+    }
+  }
+  if(isSpecialCharTypeNeeded) {
+    let includesSpecialChar = isGeneratedPasswordContains(createdPassword, specialChars);
+    if(!includesSpecialChar) {
+      return false;
+    }
+  }
+  return true;
+}
+
+// function that checkes passwords individual character to see if any of it matches with give character sequence.
+function isGeneratedPasswordContains(pwd, charTypeSequence) {
+  for(i = 0; i < pwd.length; i++) {
+    //alert("Char value to check " + pwd.charAt(i));
+    if(charTypeSequence.includes(pwd.charAt(i))) {
+      //alert("containsTrue" + pwd.charAt(i));
+      return true;
+    } 
+  } 
+  return false;
+}
